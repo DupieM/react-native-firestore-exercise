@@ -50,7 +50,7 @@ const ListScreen = ({navigation}) => {
                 bucketItems.map((item, index) => (
                     <TouchableOpacity key={index} style={styles.card} 
                         onPress={() => {
-                            navigation.navigate("Details", { 
+                            navigation.navigate("Details", { // Navigate to the detail screen with the specific params
                                 itemId: item.id,
                                 itemTitle: item.title,
                                 itemPriority: item.priority,
@@ -59,7 +59,7 @@ const ListScreen = ({navigation}) => {
                                 itemIsCompleted: item.isCompleted,
                             })
                         }}>
-                        <Text>{item.title}</Text>
+                        <Text style={item.isCompleted ? styles.completedTextStyle : null}>{item.title}</Text>
                         {item.priority ? <AntDesign name="star" size={24} color="orange" /> : null}
                         {/* Show the star icon if it is a priority */}
                     </TouchableOpacity>
@@ -107,5 +107,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'green',
         fontWeight: 'bold'
-    }
+    },
+    completedTextStyle: {
+        textDecorationLine: 'line-through',
+        color: 'gray'
+    },
 })

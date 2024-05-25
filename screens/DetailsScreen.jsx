@@ -1,12 +1,29 @@
 import { Button, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const DetailsScreen = ({ route, navigation }) => {
 
+  //Retrive the params from the list screen
   const { itemId, itemTitle, itemPriority, itemDue, itemDescription, itemIsCompleted } = route.params;
 
+  //Mark completed that disables the button
+  const [isCompleted, setIsCompleted] = useState(itemIsCompleted);
+
+  const handleMarkedCompleted = async () => {
+
+    const item = doc(db, "items", itemId);
+
+    await updateDoc(item, {
+      isCompleted: true,
+    });
+
+    setIsCompleted(true);
+
+  }
+
   //TODO: Delete an item from database
-  //TODO: Mark completed that disables the button
 
   return (
     
@@ -17,9 +34,10 @@ const DetailsScreen = ({ route, navigation }) => {
       <Text>Priority: {JSON.stringify(itemPriority)}</Text>
 
       <Button
-        title='mark completed / already done'
+        title={isCompleted ? 'mark completed' : 'already done'}
         color="red"
-        disabled={false}
+        onPress={handleMarkedCompleted}
+        disabled={isCompleted}
       />
     </View>
   )
