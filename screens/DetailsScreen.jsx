@@ -1,6 +1,6 @@
-import { Button, StyleSheet, Text, View } from 'react-native'
+import { Alert, Button, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import { doc, updateDoc } from 'firebase/firestore';
+import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 const DetailsScreen = ({ route, navigation }) => {
@@ -23,7 +23,29 @@ const DetailsScreen = ({ route, navigation }) => {
 
   }
 
-  //TODO: Delete an item from database
+  //Delete an item from database
+  const handleDeleteItem = async () => {
+    Alert.alert(
+      "Delete",
+      "Do you want to delete this specific item?",
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: "Delete",
+          onPress: async () => {
+            const item = doc(db, "items", itemId);
+            await deleteDoc(item);
+            navigation.goBack()
+          },
+          style: "destructive"
+        }
+    ]
+    )
+  }
+  
 
   return (
     
@@ -35,10 +57,17 @@ const DetailsScreen = ({ route, navigation }) => {
 
       <Button
         title={isCompleted ? 'mark completed' : 'already done'}
-        color="red"
+        color="green"
         onPress={handleMarkedCompleted}
         disabled={isCompleted}
       />
+
+      <Button
+        title="Delete"
+        color="red"
+        onPress={handleDeleteItem}
+      />
+
     </View>
   )
 }
