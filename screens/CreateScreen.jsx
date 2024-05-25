@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, Switch } from 'react-native'
 import React, { useState } from 'react'
+import { createNewBucketItem } from '../services/DbService'
 
 const CreateScreen = ({navigation}) => {
 
@@ -8,6 +9,21 @@ const CreateScreen = ({navigation}) => {
     const [priority, setPriority] = useState(false)
     const [due, setDue] = useState('')
     const [description, setDescription] = useState('')
+
+    const handleCreation = async () => {
+        //Need to pass all our data tp the function
+
+        // TODO: make sure all the values have been entered - show error/disable button
+        var items = {title, priority, due, description, isCompleted: false}
+        var success = await createNewBucketItem(items)
+        if(success){
+            navigation.goBack()
+        } else {
+            //TODO: validation why
+        }
+
+    }
+
 
   return (
     <SafeAreaView >
@@ -47,7 +63,7 @@ const CreateScreen = ({navigation}) => {
                 <Text>Priority?</Text>
             </View>
 
-            <TouchableOpacity style={styles.button} >
+            <TouchableOpacity style={styles.button} onPress={handleCreation}>
                 <Text style={styles.buttonText}>Create Bucket List Item</Text>
             </TouchableOpacity>
         

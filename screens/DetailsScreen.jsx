@@ -3,6 +3,9 @@ import React from 'react'
 
 const DetailsScreen = ({navigation}) => {
 
+  //TODO: Delete an item from database
+  //TODO: Mark completed that disables the button
+
   return (
     
     <View style={styles.container}>
