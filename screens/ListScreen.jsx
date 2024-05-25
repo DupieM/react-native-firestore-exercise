@@ -48,7 +48,17 @@ const ListScreen = ({navigation}) => {
             { 
             bucketItems != [] ? (
                 bucketItems.map((item, index) => (
-                    <TouchableOpacity key={index} style={styles.card} onPress={() => navigation.navigate("Details")}>
+                    <TouchableOpacity key={index} style={styles.card} 
+                        onPress={() => {
+                            navigation.navigate("Details", { 
+                                itemId: item.id,
+                                itemTitle: item.title,
+                                itemPriority: item.priority,
+                                itemDue: item.due,
+                                itemDescription: item.description,
+                                itemIsCompleted: item.isCompleted,
+                            })
+                        }}>
                         <Text>{item.title}</Text>
                         {item.priority ? <AntDesign name="star" size={24} color="orange" /> : null}
                         {/* Show the star icon if it is a priority */}
