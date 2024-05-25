@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, Switch } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, Switch, Alert } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { createNewBucketItem } from '../services/DbService'
 
 const CreateScreen = ({navigation}) => {
@@ -10,16 +10,32 @@ const CreateScreen = ({navigation}) => {
     const [due, setDue] = useState('')
     const [description, setDescription] = useState('')
 
-    const handleCreation = async () => {
-        //Need to pass all our data tp the function
+    const [isFormValid, setIsFormValid] = useState(false);
+    useEffect(() => {
+        // Check if all required fields are filled
+        if (title.trim() && due.trim() && description.trim()) {
+            setIsFormValid(true);
+        } else {
+            setIsFormValid(false);
+        }
+    }, [title, due, description]);
 
-        // TODO: make sure all the values have been entered - show error/disable button
+    const handleCreation = async () => {
+        //Need to pass all our data to the function
+
+        //Make sure all the values have been entered - show error/disable button
+        if (!isFormValid) {
+            Alert.alert("Validation Error", "Please fill all the required fields.");
+            return;
+        }
+
         var items = {title, priority, due, description, isCompleted: false}
         var success = await createNewBucketItem(items)
         if(success){
             navigation.goBack()
         } else {
-            //TODO: validation why
+            //Validation why
+            Alert.alert("Error", "Failed to create bucket list item.");
         }
 
     }
